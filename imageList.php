@@ -48,7 +48,7 @@ if ($order_dir) {
 $db->pageLimit = $pagelimit;
 
 // Get result of the query
-$rows = $db->arraybuilder()->paginate('customers', $page, $select);
+$rows = $db->arraybuilder()->paginate('gallery', $page, "*");
 $total_pages = $db->totalPages;
 ?>
 <?php include BASE_PATH . '/includes/header.php'; ?>
@@ -84,7 +84,7 @@ $total_pages = $db->totalPages;
             <?php foreach ($rows as $row): ?>
             <tr>
                 <td><?php echo $row['id']; ?></td>
-                <td><img src="<?php echo ($row['imagesrc']); ?>" "height"=100 "width"=100 /></td>
+                <td><img src="<?php echo ($row['imagesrc']); ?>" style="height:100px;width:100px;" /></td>
                 <td>
                 <center>    <a href="#" class="btn btn-danger delete_btn" data-toggle="modal" data-target="#confirm-delete-<?php echo $row['id']; ?>"><i class="glyphicon glyphicon-trash"></i></a>
                 </center>  </td>

@@ -7,10 +7,10 @@ require_once BASE_PATH.'/includes/auth_validate.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
 {
     // Mass Insert Data. Keep "name" attribute in html form same as column name in mysql table.
-    $data_to_db = array_filter($_POST);
+//    $data_to_db = array_filter($_POST);
 
 	$target_dir = "uploads/";
-	$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+	$target_file = $target_dir . rand(0,10000).'-'.basename($_FILES["fileToUpload"]["name"]);
 	$uploadOk = 1;
 	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	// Check if image file is a actual image or fake image
@@ -47,18 +47,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 	} else {
 		if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 			echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+			    $db = getDbInstance();
+				$data_to_db['imagesrc']= $target_file;
+			$last_id = $db->insert('gallery', $data_to_db);
+
 		} else {
 			echo "Sorry, there was an error uploading your file.";
 		}
 	}
-    $db = getDbInstance();
-    $last_id = $db->insert('gallery', $data_to_db);
 
     if ($last_id)
     {
         $_SESSION['success'] = 'Customer added successfully!';
         // Redirect to the listing page
-        header('Location: customers.php');
+        header('Location: imageList.php');
         // Important! Don't execute the rest put the exit/die.
     	exit();
     }
